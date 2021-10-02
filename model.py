@@ -31,9 +31,14 @@ class StorageSpace(db.Model):
     location = db.Column(db.String(50), nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
 
-# melons
-    # initial_slices
-    # arrival_date
+
+
+class Melon(db.Model):
+
+    __tablename__ = "melons"
+    melon_id = db.Column(db.Integer, primary_key=True)
+    initial_slices = db.Column(db.Integer, nullable=False)
+    arrival_date = db.Column(db.Date, nullable=False)
     # melon_type_id (fk)
     # storage_space_id (fk)
 
@@ -67,6 +72,7 @@ def connect_to_db(app, db_name):
 if __name__ == "__main__":
     from flask import Flask
     import os
+    import datetime
 
     os.system("dropdb melon_bites --if-exists")
     os.system("createdb melon_bites")
@@ -83,8 +89,10 @@ if __name__ == "__main__":
     cren = MelonType(name="crenshaw", max_slices=25)
 
     space1 = StorageSpace(location="warehouse in  Richmond", capacity=400)
+
+    melon1 = Melon(initial_slices=20, arrival_date=datetime.datetime.now())
     
-    db.session.add_all([cust1, cren, space1])
+    db.session.add_all([cust1, cren, space1, melon1])
 
     db.session.commit()
 

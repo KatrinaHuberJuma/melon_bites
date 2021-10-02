@@ -57,10 +57,20 @@ class Order(db.Model):
 
     customer = db.relationship("Customer", backref="orders")
 
-# melon_orders
-    # melon_order_id
-    # melon_id (fk)
-    # order_id (fk)
+
+
+class MelonOrder(db.Model):
+
+    __tablename__ = "melon_orders"
+    melon_order_id = db.Column(db.Integer, primary_key=True)
+    quantity = db.Column(db.Integer, nullable=False)
+    melon_id = db.Column(db.Integer, db.ForeignKey("melons.melon_id"), nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey("orders.order_id"), nullable=False)
+
+    melon = db.relationship("Melon", backref="melon_orders")
+    order = db.relationship("Order", backref="melon_orders")
+
+    
 
 # ======================================
 
@@ -95,8 +105,10 @@ if __name__ == "__main__":
     db.create_all()
 
     cust1 = Customer(name="fred the vampire", password="accountant4unlife", address="charlotte manner")
-    
+    cust2 = Customer(name="bubba the werepony", password="nightmare", address="charlotte manner")
+
     cren = MelonType(name="crenshaw", max_slices=25)
+    musk = MelonType(name="muskmelon", max_slices=15)
 
     space1 = StorageSpace(location="warehouse in  Richmond", capacity=400)
 
@@ -108,9 +120,20 @@ if __name__ == "__main__":
                     arrival_date=datetime.datetime.now(), 
                     melon_type=cren, storage_space=space1) # uses the sqlalchmey relationship from the Melon instance
                     # passing in a MelonType object
+    
+    melon3 = Melon(initial_slices=20, arrival_date="2021-09-29", melon_type=musk)
+    
+    melon_order1 = MelonOrder(melon=melon1, quantity=7, order=Order(customer=cust2))
 
     order1 = Order(customer=cust1)
-    cust1.orders.append(Order(date="2021-10-05"))
+    order1.melon_orders.append(MelonOrder(melon=melon2, quantity=5)) 
+    order1.melon_orders.extend([MelonOrder(melon=melon3, quantity=5)])
+
+    
+
+
+
+    
     
     db.session.add_all([cust1, cren, space1, melon1])
 

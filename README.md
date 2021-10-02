@@ -1,10 +1,3 @@
-## TODO: model the following tables
-- [x] customers
-- [x] melon_types
-- [x] storage_spaces
-- [ ] melons
-- [ ] orders
-- [ ] melon_orders
 
 # notes on process:
 

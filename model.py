@@ -8,16 +8,18 @@ class Customer(db.Model):
     __tablename__ = "customers"
 
     customer_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-    # name
-    # password
-    # address
+    name = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(50), nullable=False)
+    address = db.Column(db.String(50), nullable=False)
 
 
-# melon_types
-    # melon_type_id
-    # max_slices
-    # name
+class MelonType(db.Model):
+    
+    __tablename__ = "melon_types"
+    
+    melon_type_id = db.Column(db.Integer, primary_key=True)
+    max_slices = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
 
 # storage_spaces
     # storage_space_id
@@ -71,8 +73,11 @@ if __name__ == "__main__":
     # Make our tables
     db.create_all()
 
-    cust1 = Customer(name="fred the vampire")
-    db.session.add_all([cust1])
+    cust1 = Customer(name="fred the vampire", password="accountant4unlife", address="charlotte manner")
+    
+    cren = MelonType(name="crenshaw", max_slices=25)
+    
+    db.session.add_all([cust1, cren])
 
     db.session.commit()
 

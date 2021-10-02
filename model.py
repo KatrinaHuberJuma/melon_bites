@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 
 
 db = SQLAlchemy()
@@ -42,15 +43,19 @@ class Melon(db.Model):
     initial_slices = db.Column(db.Integer, nullable=False)
     arrival_date = db.Column(db.Date, nullable=False)
     melon_type_id = db.Column(db.Integer, db.ForeignKey("melon_types.melon_type_id"), nullable=False)
-    storage_space_id = db.Column(db.Integer, db.ForeignKey("storage_spaces.storage_space_id"), nullable=False)
+    storage_space_id = db.Column(db.Integer, db.ForeignKey("storage_spaces.storage_space_id"))
 
     melon_type = db.relationship("MelonType", backref="melons")
     storage_space = db.relationship("StorageSpace", backref="melons")
 
-# orders
-    # order_id
-    # date
-    # customer_id
+class Order(db.Model):
+
+    __tablename__ = "orders"
+    order_id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date, nullable=False, default=datetime.datetime.now())
+    customer_id = db.Column(db.Integer, db.ForeignKey("customers.customer_id"), nullable=False)
+
+    customer = db.relationship("Customer", backref="orders")
 
 # melon_orders
     # melon_order_id
@@ -77,7 +82,7 @@ def connect_to_db(app, db_name):
 if __name__ == "__main__":
     from flask import Flask
     import os
-    import datetime
+    
 
     os.system("dropdb melon_bites --if-exists")
     os.system("createdb melon_bites")
@@ -95,7 +100,7 @@ if __name__ == "__main__":
 
     space1 = StorageSpace(location="warehouse in  Richmond", capacity=400)
 
-    melon1 = Melon(initial_slices=20, arrival_date=datetime.datetime.now())
+    melon1 = Melon(initial_slices=20, arrival_date="2021-10-01" )
     cren.melons.append(melon1) # uses sqlalchemy relationship from the MelonType instance
     space1.melons.append(melon1)
 
@@ -104,7 +109,8 @@ if __name__ == "__main__":
                     melon_type=cren, storage_space=space1) # uses the sqlalchmey relationship from the Melon instance
                     # passing in a MelonType object
 
-    
+    order1 = Order(customer=cust1)
+    cust1.orders.append(Order(date="2021-10-05"))
     
     db.session.add_all([cust1, cren, space1, melon1])
 

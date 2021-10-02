@@ -21,10 +21,15 @@ class MelonType(db.Model):
     max_slices = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(50), nullable=False)
 
-# storage_spaces
-    # storage_space_id
-    # location
-    # capacity
+
+
+class StorageSpace(db.Model):
+
+    __tablename__ = "storage_spaces"
+
+    storage_space_id = db.Column(db.Integer, primary_key=True)
+    location = db.Column(db.String(50), nullable=False)
+    capacity = db.Column(db.Integer, nullable=False)
 
 # melons
     # initial_slices
@@ -76,8 +81,10 @@ if __name__ == "__main__":
     cust1 = Customer(name="fred the vampire", password="accountant4unlife", address="charlotte manner")
     
     cren = MelonType(name="crenshaw", max_slices=25)
+
+    space1 = StorageSpace(location="warehouse in  Richmond", capacity=400)
     
-    db.session.add_all([cust1, cren])
+    db.session.add_all([cust1, cren, space1])
 
     db.session.commit()
 

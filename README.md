@@ -17,3 +17,5 @@ First I have some imports, then my code will drop the existing db `melon_bites` 
 
 
 I have created one instance of each class I've written and committed them to the database. Now, after each time I run model, I should see that may tables each have at least one row.
+
+## I run my code before each commit, regardless of how confident I am that it is correct 

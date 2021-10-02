@@ -39,8 +39,10 @@ class Melon(db.Model):
     melon_id = db.Column(db.Integer, primary_key=True)
     initial_slices = db.Column(db.Integer, nullable=False)
     arrival_date = db.Column(db.Date, nullable=False)
-    # melon_type_id (fk)
+    melon_type_id = db.Column(db.Integer, db.ForeignKey("melon_types.melon_type_id"), nullable=False)
     # storage_space_id (fk)
+
+    melon_type = db.relationship("MelonType", backref="melons")
 
 # orders
     # order_id
@@ -91,6 +93,14 @@ if __name__ == "__main__":
     space1 = StorageSpace(location="warehouse in  Richmond", capacity=400)
 
     melon1 = Melon(initial_slices=20, arrival_date=datetime.datetime.now())
+    cren.melons.append(melon1) # uses sqlalchemy relationship from the MelonType instance
+
+    melon2 = Melon(initial_slices=15, 
+                    arrival_date=datetime.datetime.now(), 
+                    melon_type=cren) # uses the sqlalchmey relationship from the Melon instance
+                    # passing in a MelonType object
+
+    
     
     db.session.add_all([cust1, cren, space1, melon1])
 

@@ -21,3 +21,5 @@ I have created one instance of each class I've written and committed them to the
 ## I run my code before each commit, regardless of how confident I am that it is correct 
 
 And if there is something I am less confident of, I will test it separately from other parts of the class: for example, I wasn't 100% sure I had the right syntax for the date field on the melons table, so I ran the code for that before also adding in the foreign keys in that table.
+
+TODO: notes on the stuff i did while sleepy

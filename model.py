@@ -20,6 +20,7 @@ class MelonType(db.Model):
     melon_type_id = db.Column(db.Integer, primary_key=True)
     max_slices = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(50), nullable=False)
+    # relationionship: melons (list of related Melon objects)
 
 
 
@@ -30,6 +31,7 @@ class StorageSpace(db.Model):
     storage_space_id = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.String(50), nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
+    # relationionship: melons (list of related Melon objects)
 
 
 
@@ -40,9 +42,10 @@ class Melon(db.Model):
     initial_slices = db.Column(db.Integer, nullable=False)
     arrival_date = db.Column(db.Date, nullable=False)
     melon_type_id = db.Column(db.Integer, db.ForeignKey("melon_types.melon_type_id"), nullable=False)
-    # storage_space_id (fk)
+    storage_space_id = db.Column(db.Integer, db.ForeignKey("storage_spaces.storage_space_id"), nullable=False)
 
     melon_type = db.relationship("MelonType", backref="melons")
+    storage_space = db.relationship("StorageSpace", backref="melons")
 
 # orders
     # order_id
@@ -94,10 +97,11 @@ if __name__ == "__main__":
 
     melon1 = Melon(initial_slices=20, arrival_date=datetime.datetime.now())
     cren.melons.append(melon1) # uses sqlalchemy relationship from the MelonType instance
+    space1.melons.append(melon1)
 
     melon2 = Melon(initial_slices=15, 
                     arrival_date=datetime.datetime.now(), 
-                    melon_type=cren) # uses the sqlalchmey relationship from the Melon instance
+                    melon_type=cren, storage_space=space1) # uses the sqlalchmey relationship from the Melon instance
                     # passing in a MelonType object
 
     
